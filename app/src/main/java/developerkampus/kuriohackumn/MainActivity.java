@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,20 +36,20 @@ import developerkampus.kuriohackumn.model.News;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-
     private static final String url = "http://dodirivaldi.id/kurio.php";
-    private List<News> movieList = new ArrayList<News>();
+    private List<News> movieList;
     private ListView listView;
     private NewsAdapter adapter;
-
-    News movie = new News();
 
     private ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        movieList = new ArrayList<News>();
         initCollapsingToolbar();
 
         img = (ImageView) findViewById(R.id.backdrop);
@@ -57,27 +58,44 @@ public class MainActivity extends AppCompatActivity {
         adapter = new NewsAdapter(this, movieList);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-                intent.putExtra("title", movie.getTitle() );
-                intent.putExtra("image", movie.getImage());
-                startActivity(intent);
-            }
-        });
         // Creating volley request obj
         JsonArrayRequest movieReq = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         // Parsing json
+
                         for (int i = 0; i < response.length(); i++) {
                             try {
-
                                 JSONObject obj = response.getJSONObject(i);
+                                News movie = new News();
                                 movie.setTitle(obj.getString("title"));
                                 movie.setImage(obj.getString("image"));
+                                movie.setContent(obj.getString("content"));
+                                movie.setVote(obj.getString("vote"));
+                                movie.setHoax(obj.getString("hoax"));
+                                movie.setTruth(obj.getString("truth"));
+
+                                final String judul= movie.getTitle();
+                                final String image = movie.getImage();
+                                final String content = movie.getContent();
+                                final String vote = movie.getVote();
+                                final String hoax = movie.getHoax();
+                                final String truth = movie.getTruth();
+
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                                        intent.putExtra("judul", judul);
+                                        intent.putExtra("gambar", image);
+                                        intent.putExtra("content", content);
+                                        intent.putExtra("vote", vote);
+                                        intent.putExtra("hoax", hoax);
+                                        intent.putExtra("truth", truth);
+                                        startActivity(intent);
+                                    }
+                                });
 
                                 movieList.add(movie);
 
@@ -86,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         }
+
 
                         // notifying list adapter about data changes
                         // so that it renders the list view with updated data
@@ -117,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         });
         RequestQueue rQueue = Volley.newRequestQueue(this);
         rQueue.add(movieReq);
-
 
         try {
             Glide.with(this).load("http://himtiumn.com/images/article/full/hackathon-umn-Mp22R.png").into(img);

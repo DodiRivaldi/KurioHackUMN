@@ -12,8 +12,7 @@
         android:maxHeight="300dp"
         android:scaleType="fitXY"
         android:layout_height="wrap_content"
-        android:alpha=".50"
-        android:src="@drawable/bri"/>
+        android:alpha=".50"/>
 
     <TextView
         android:textAllCaps="true"
