@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="viewBg">#f1f5f8</color>
     <color name="album_title">#4c4c4c</color>
+    <color name="ijo">#FF4AFF40</color>
+    <color name="merah">#f50202</color>
+    <color name="biru">#216ccf</color>
 </resources>

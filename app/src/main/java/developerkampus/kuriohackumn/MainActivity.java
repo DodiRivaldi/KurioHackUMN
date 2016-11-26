@@ -1,5 +1,6 @@
 package developerkampus.kuriohackumn;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ContentAdapter adapter;
     private List<Content> albumList;
+    private ImageView img;
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String url = "https://hack.kurio.co.id/v1/feed/topic:40";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         initCollapsingToolbar();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
+        img = (ImageView) findViewById(R.id.backdrop);
         albumList = new ArrayList<>();
         adapter = new ContentAdapter(this, albumList);
 
@@ -47,13 +52,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+
         prepareAlbums();
 
         try {
-            Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
+            Glide.with(this).load("http://himtiumn.com/images/article/full/hackathon-umn-Mp22R.png").into(img);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, DetailActivity.class));
+            }
+        });
+
     }
 
     /**

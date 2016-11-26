@@ -52,6 +52,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.content_card, parent, false);
 
+
         return new MyViewHolder(itemView);
     }
 
