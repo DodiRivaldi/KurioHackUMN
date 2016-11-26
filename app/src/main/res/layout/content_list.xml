@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/viewBg"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main">
 
-    <ImageView
-        android:id="@+id/img_tumb_update"
-        android:layout_width="match_parent"
-        android:adjustViewBounds="true"
-        android:maxWidth="300dp"
-        android:maxHeight="300dp"
-        android:scaleType="fitXY"
-        android:layout_height="wrap_content"
-        android:alpha=".50"
-        android:src="@drawable/bri"/>
-
-    <TextView
-        android:textAllCaps="true"
-        android:textStyle="bold"
-        android:id="@+id/tv_judul_update"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:textSize="30sp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Medium Text skfkjdhfiadhdah hdchdsh dhvsujehvsd dhjdshjksdhsjkds dhkshs"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="-180dp"
-        android:padding="2dp"/>
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
 
-</LinearLayout>
+</RelativeLayout>
