@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "471221474047",
+    "firebase_url": "https://hackumn.firebaseio.com",
+    "project_id": "hackumn",
+    "storage_bucket": "hackumn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471221474047:android:a7431105774feb79",
+        "android_client_info": {
+          "package_name": "developerkampus.kuriohackumn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471221474047-v6l59d3qkclo00gov66a3j92sb7n4gja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "developerkampus.kuriohackumn",
+            "certificate_hash": "A23F0DC1718DF010DB5663C58838A648175AE866"
+          }
+        },
+        {
+          "client_id": "471221474047-ohja17012r8hgothcuilr189n5gspgka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKEVwzkN_Qk-NybeSuiTzlz0s5YId_VC4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471221474047-ohja17012r8hgothcuilr189n5gspgka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
