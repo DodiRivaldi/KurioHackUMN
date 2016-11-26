@@ -7,66 +7,123 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import developerkampus.kuriohackumn.adapter.ContentAdapter;
-import developerkampus.kuriohackumn.model.Content;
+import developerkampus.kuriohackumn.adapter.NewsAdapter;
+import developerkampus.kuriohackumn.model.News;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private ContentAdapter adapter;
-    private List<Content> albumList;
-    private ImageView img;
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final String url = "https://hack.kurio.co.id/v1/feed/topic:40";
+    private static final String url = "http://dodirivaldi.id/kurio.php";
+    private List<News> movieList = new ArrayList<News>();
+    private ListView listView;
+    private NewsAdapter adapter;
 
+    News movie = new News();
+
+    private ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         initCollapsingToolbar();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         img = (ImageView) findViewById(R.id.backdrop);
-        albumList = new ArrayList<>();
-        adapter = new ContentAdapter(this, albumList);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        listView = (ListView) findViewById(R.id.lv_news);
+        adapter = new NewsAdapter(this, movieList);
+        listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                intent.putExtra("title", movie.getTitle() );
+                intent.putExtra("image", movie.getImage());
+                startActivity(intent);
+            }
+        });
+        // Creating volley request obj
+        JsonArrayRequest movieReq = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Parsing json
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
 
-        prepareAlbums();
+                                JSONObject obj = response.getJSONObject(i);
+                                movie.setTitle(obj.getString("title"));
+                                movie.setImage(obj.getString("image"));
+
+                                movieList.add(movie);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        // notifying list adapter about data changes
+                        // so that it renders the list view with updated data
+                        adapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+
+            }
+        });
+
+        movieReq.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        RequestQueue rQueue = Volley.newRequestQueue(this);
+        rQueue.add(movieReq);
+
 
         try {
             Glide.with(this).load("http://himtiumn.com/images/article/full/hackathon-umn-Mp22R.png").into(img);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, DetailActivity.class));
-            }
-        });
 
     }
 
@@ -105,53 +162,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Adding few albums for testing
      */
-    private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        Content a = new Content("True Romance", 13, covers[0]);
-        albumList.add(a);
-
-        a = new Content("Xscpae", 8, covers[1]);
-        albumList.add(a);
-
-        a = new Content("Maroon 5", 11, covers[2]);
-        albumList.add(a);
-
-        a = new Content("Born to Die", 12, covers[3]);
-        albumList.add(a);
-
-        a = new Content("Honeymoon", 14, covers[4]);
-        albumList.add(a);
-
-        a = new Content("I Need a Doctor", 1, covers[5]);
-        albumList.add(a);
-
-        a = new Content("Loud", 11, covers[6]);
-        albumList.add(a);
-
-        a = new Content("Legend", 14, covers[7]);
-        albumList.add(a);
-
-        a = new Content("Hello", 11, covers[8]);
-        albumList.add(a);
-
-        a = new Content("Greatest Hits", 17, covers[9]);
-        albumList.add(a);
-
-        adapter.notifyDataSetChanged();
-    }
-
     /**
      * RecyclerView item decoration - give equal margin around grid item
      */

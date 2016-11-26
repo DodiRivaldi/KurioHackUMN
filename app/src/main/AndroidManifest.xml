@@ -7,14 +7,16 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="KurioHackUMN"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".DetailActivity" />
+        <activity
+            android:label="Detail News"
+            android:name=".DetailActivity" />
         <activity
             android:name=".SplashActivity"
             android:noHistory="true"
