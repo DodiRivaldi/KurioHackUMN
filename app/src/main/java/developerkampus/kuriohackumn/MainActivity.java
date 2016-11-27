@@ -50,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         movieList = new ArrayList<News>();
-        initCollapsingToolbar();
 
         img = (ImageView) findViewById(R.id.backdrop);
 
         listView = (ListView) findViewById(R.id.lv_news);
         adapter = new NewsAdapter(this, movieList);
         listView.setAdapter(adapter);
+
 
         // Creating volley request obj
         JsonArrayRequest movieReq = new JsonArrayRequest(url,
@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
                         for (int i = 0; i < response.length(); i++) {
                             try {
+                                final News movie = new News();
                                 JSONObject obj = response.getJSONObject(i);
-                                News movie = new News();
                                 movie.setTitle(obj.getString("title"));
                                 movie.setImage(obj.getString("image"));
                                 movie.setContent(obj.getString("content"));
@@ -76,26 +76,6 @@ public class MainActivity extends AppCompatActivity {
                                 movie.setHoax(obj.getString("hoax"));
                                 movie.setTruth(obj.getString("truth"));
 
-                                final String judul= movie.getTitle();
-                                final String image = movie.getImage();
-                                final String content = movie.getContent();
-                                final String vote = movie.getVote();
-                                final String hoax = movie.getHoax();
-                                final String truth = movie.getTruth();
-
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-                                        intent.putExtra("judul", judul);
-                                        intent.putExtra("gambar", image);
-                                        intent.putExtra("content", content);
-                                        intent.putExtra("vote", vote);
-                                        intent.putExtra("hoax", hoax);
-                                        intent.putExtra("truth", truth);
-                                        startActivity(intent);
-                                    }
-                                });
 
                                 movieList.add(movie);
 
@@ -103,6 +83,29 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                                    final News movie = movieList.get(position);
+                                    final String judul= movie.getTitle();
+                                    final String image = movie.getImage();
+                                    final String content = movie.getContent();
+                                    final String vote = movie.getVote();
+                                    final String hoax = movie.getHoax();
+                                    final String truth = movie.getTruth();
+
+
+                                    intent.putExtra("judul", judul);
+                                    intent.putExtra("gambar", image);
+                                    intent.putExtra("content", content);
+                                    intent.putExtra("vote", vote);
+                                    intent.putExtra("hoax", hoax);
+                                    intent.putExtra("truth", truth);
+                                    startActivity(intent);
+                                }
+                            });
                         }
 
 
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
     }
 

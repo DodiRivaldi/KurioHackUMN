@@ -50,7 +50,7 @@ public class News {
         return content;
     }
 
-    public void setContent(String content) {
+    public  void setContent(String content) {
         this.content = content;
     }
 
@@ -58,7 +58,7 @@ public class News {
         return vote;
     }
 
-    public void setVote(String vote) {
+    public   void setVote(String vote) {
         this.vote = vote;
     }
 
@@ -66,7 +66,7 @@ public class News {
         return hoax;
     }
 
-    public void setHoax(String hoax) {
+    public  void setHoax(String hoax) {
         this.hoax = hoax;
     }
 
